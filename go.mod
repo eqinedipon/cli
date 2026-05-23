@@ -1,11 +1,9 @@
 module github.com/urfave/cli/v3
 
-go 1.22
-
-require github.com/stretchr/testify v1.11.1
+go 1.21
 
 require (
-	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/pmezard/go-difflib v1.0.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
+	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1
 )
+
+require golang.org/x/text v0.14.0
