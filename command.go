@@ -97,7 +97,9 @@ func (c *Command) Run(ctx context.Context, args []string) error {
 		for _, sub := range c.Commands {
 			if sub.Name == subName || containsString(sub.Aliases, subName) {
 				sub.parent = c
-				return sub.Run(ctx, append([]string{subName}, remaining[1:]...))
+				// Pass the full args slice so the subcommand can re-parse its own flags.
+				// Using remaining[0:] preserves the subcommand name as args[0].
+				return sub.Run(ctx, remaining)
 			}
 		}
 	}
@@ -135,39 +137,4 @@ func (c *Command) setup() error {
 	}
 
 	if c.Writer == nil {
-		c.Writer = os.Stdout
-	}
-
-	if c.ErrWriter == nil {
-		c.ErrWriter = os.Stderr
-	}
-
-	c.flagSet = flag.NewFlagSet(c.Name, flag.ContinueOnError)
-	c.flagSet.SetOutput(c.ErrWriter)
-
-	for _, f := range c.Flags {
-		if err := f.Apply(c.flagSet); err != nil {
-			return fmt.Errorf("error applying flag %q: %w", f.GetName(), err)
-		}
-	}
-
-	return nil
-}
-
-// String returns the full command name including parent names.
-func (c *Command) String() string {
-	if c.parent != nil {
-		return strings.Join([]string{c.parent.String(), c.Name}, " ")
-	}
-	return c.Name
-}
-
-// containsString checks if a slice contains a given string.
-func containsString(slice []string, s string) bool {
-	for _, v := range slice {
-		if v == s {
-			return true
-		}
-	}
-	return false
-}
+		c
