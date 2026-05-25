@@ -7,3 +7,6 @@ require (
 )
 
 require golang.org/x/text v0.16.0
+
+// Personal fork for learning and experimentation.
+// Upstream: https://github.com/urfave/cli
